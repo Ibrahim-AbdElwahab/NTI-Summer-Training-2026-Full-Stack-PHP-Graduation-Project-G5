@@ -10,4 +10,8 @@ class Post extends Model
     {
         return $this->hasMany(Comment::class)->latest(); // عشان يجيب الأحدث الأول
     }
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\AdminController;
 
 // 1. الصفحة الرئيسية: لو زائر جديد وديه للوجن أول حاجة، لو مسجل دخول وديه للمقالات
 Route::get('/', function () {
@@ -47,3 +48,20 @@ Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name
 Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
 Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
 Route::post('/comments/{comment}/like', [CommentController::class, 'toggleLike'])->name('comments.like');
+
+// 1. مسار الإشعارات (لأي يوزر مسجل دخول عادي أو أدمن)
+Route::middleware('auth')->group(function () {
+    // ... مساراتك القديمة بتاعة البوستات والتعليقات ...
+
+    Route::get('/notifications', [AdminController::class, 'notifications'])->name('notifications');
+});
+
+
+// 2. مسارات لوحة تحكم الأدمن (محمية بـ auth و admin مع بعض)
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('/admin', [AdminController::class, 'index'])->name('admin.dashboard');
+    Route::get('/admin/users', [AdminController::class, 'users'])->name('admin.users');
+    Route::delete('/admin/users/{id}', [AdminController::class, 'deleteUser'])->name('admin.users.delete');
+    Route::get('/admin/posts', [AdminController::class, 'posts'])->name('admin.posts');
+    Route::delete('/admin/posts/{id}', [AdminController::class, 'deletePost'])->name('admin.posts.delete');
+});
