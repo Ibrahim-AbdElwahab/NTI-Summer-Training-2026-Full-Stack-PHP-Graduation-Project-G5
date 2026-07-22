@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
 
 // 1. الصفحة الرئيسية: لو زائر جديد وديه للوجن أول حاجة، لو مسجل دخول وديه للمقالات
 Route::get('/', function () {
@@ -38,3 +39,11 @@ Route::middleware('auth')->group(function () {
     Route::get('/posts/update/{post}', [PostController::class, 'edit'])->name('post.edit');
     Route::put('/posts/update/{post}', [PostController::class, 'update'])->name('posts.update');
 });
+
+// ==========================================
+// Comments & Likes Routes (مسارات التعليقات والإعجابات)
+// ==========================================
+Route::post('/posts/{post}/comments', [CommentController::class, 'store'])->name('comments.store');
+Route::put('/comments/{comment}', [CommentController::class, 'update'])->name('comments.update');
+Route::delete('/comments/{comment}', [CommentController::class, 'destroy'])->name('comments.destroy');
+Route::post('/comments/{comment}/like', [CommentController::class, 'toggleLike'])->name('comments.like');
