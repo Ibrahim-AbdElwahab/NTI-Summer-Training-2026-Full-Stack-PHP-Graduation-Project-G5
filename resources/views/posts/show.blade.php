@@ -49,7 +49,6 @@
 
 <body>
 
-    <!-- الناف بار -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-custom mb-5 shadow">
         <div class="container d-flex justify-content-between align-items-center">
             <a class="navbar-brand fw-bold fs-4" href="{{ route('posts.index') }}">🚀 منصة المقالات</a>
@@ -63,7 +62,6 @@
 
     <div class="container pb-5" style="max-width: 850px;">
 
-        <!-- تفاصيل المقال -->
         <div class="card shadow-sm mb-5 p-4 p-md-5 bg-white">
             <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
                 <h2 class="fw-bold text-dark m-0">{{ $post->title }}</h2>
@@ -85,7 +83,6 @@
                 {{ $post->content }}
             </p>
 
-            <!-- أزرار التعديل والحذف (تظهر لصاحب المقال فقط) -->
             @if(auth()->id() == $post->user_id)
             <div class="mt-5 pt-3 border-top d-flex justify-content-end gap-2">
                 <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-outline-secondary rounded-pill px-4 fw-bold">✏️ تعديل</a>
@@ -98,11 +95,9 @@
             @endif
         </div>
 
-        <!-- قسم التعليقات -->
         <div class="card shadow-sm p-4 p-md-5 bg-white">
             <h4 class="fw-bold mb-4 text-dark border-bottom pb-3">💬 التعليقات</h4>
 
-            <!-- فورم إضافة تعليق -->
             <form action="{{ route('comments.store', $post->id) }}" method="POST" class="mb-5">
                 @csrf
                 <div class="form-floating mb-3">
@@ -114,7 +109,6 @@
                 </div>
             </form>
 
-            <!-- عرض التعليقات -->
             <div class="d-flex flex-column gap-3">
                 @forelse($post->comments as $comment)
                 <div class="comment-box p-3 shadow-sm border">

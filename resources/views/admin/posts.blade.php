@@ -8,18 +8,17 @@
 </head>
 
 <body class="bg-light">
-
     <div class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-4 p-4 bg-white rounded-4 shadow-sm">
-            <h3 class="fw-bold m-0">📝 إدارة المقالات</h3>
-            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary">🔙 عودة للوحة التحكم</a>
+            <h3 class="fw-bold text-success m-0">📝 إدارة المقالات</h3>
+            <a href="{{ route('admin.dashboard') }}" class="btn btn-outline-secondary rounded-pill px-4 fw-bold">🔙 عودة للوحة التحكم</a>
         </div>
 
         @if (session('success'))
-        <div class="alert alert-success fw-semibold">{{ session('success') }}</div>
+        <div class="alert alert-success fw-bold">{{ session('success') }}</div>
         @endif
 
-        <div class="card border-0 rounded-4 shadow-sm overflow-hidden">
+        <div class="card border-0 rounded-4 shadow-sm overflow-hidden bg-white p-3">
             <table class="table table-hover align-middle m-0 text-center">
                 <thead class="table-dark">
                     <tr>
@@ -38,10 +37,10 @@
                         <td><span class="badge bg-info text-dark px-3">{{ $post->user->name ?? 'غير معروف' }}</span></td>
                         <td class="text-muted" dir="ltr">{{ $post->created_at->format('Y-m-d') }}</td>
                         <td>
-                            <form method="POST" action="{{ route('admin.posts.delete', $post->id) }}" onsubmit="return confirm('هل أنت متأكد من حذف هذا المقال؟ سيتم إرسال إشعار لصاحبه.')">
+                            <form method="POST" action="{{ route('admin.posts.delete', $post->id) }}" onsubmit="return confirm('هل أنت متأكد من حذف هذا المقال؟ سيتم إرسال إشعار لصاحبه.')" class="m-0">
                                 @csrf
                                 @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-outline-danger px-3">🗑️ حذف</button>
+                                <button type="submit" class="btn btn-sm btn-outline-danger px-3 rounded-pill">🗑️ حذف</button>
                             </form>
                         </td>
                     </tr>
@@ -54,7 +53,6 @@
             </table>
         </div>
     </div>
-
 </body>
 
 </html>
