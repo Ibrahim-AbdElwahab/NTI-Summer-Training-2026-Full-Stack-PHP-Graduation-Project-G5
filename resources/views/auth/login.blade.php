@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>تسجيل الدخول</title>
+    <title>تسجيل الدخول - منصة المقالات</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
     <style>
         body {
@@ -16,26 +16,23 @@
             border: none;
         }
 
-        .btn-dark {
-            background-color: #2b2d42;
+        .btn-gradient {
+            background: linear-gradient(135deg, #2b2d42 0%, #1a1b28 100%);
             border: none;
+            color: white;
             transition: 0.3s;
         }
 
-        .btn-dark:hover {
-            background-color: #1a1b28;
+        .btn-gradient:hover {
             transform: translateY(-2px);
+            color: white;
+            box-shadow: 0 10px 20px rgba(43, 45, 66, 0.3);
         }
 
         .form-floating>label {
             right: 0;
             left: auto;
             padding-right: 1.25rem;
-        }
-
-        .form-control:focus {
-            box-shadow: 0 0 0 0.25rem rgba(43, 45, 66, 0.25);
-            border-color: #2b2d42;
         }
     </style>
 </head>
@@ -47,7 +44,7 @@
                 <div class="card shadow-lg p-4 p-md-5">
                     <div class="text-center mb-4">
                         <h2 class="fw-bold text-dark">مرحباً بعودتك 👋</h2>
-                        <p class="text-muted">سجل دخولك عشان تتابع أحدث المقالات</p>
+                        <p class="text-muted">سجل دخولك لتتابع أحدث المقالات</p>
                     </div>
 
                     @if($errors->any())
@@ -68,18 +65,17 @@
                             <label for="passInput">كلمة المرور</label>
                         </div>
 
-                        <button type="submit" class="btn btn-dark w-100 rounded-pill fw-bold fs-5 py-2 mb-3 shadow-sm">دخول</button>
+                        <button type="submit" class="btn btn-gradient w-100 rounded-pill fw-bold fs-5 py-3 mb-3">دخول 🚀</button>
 
                         <div class="text-center mt-2">
                             <span class="text-muted">ليس لديك حساب؟</span>
-                            <a href="{{ route('users.regist.view') }}" class="text-decoration-none fw-bold text-dark border-bottom border-dark pb-1">أنشئ حساباً جديداً</a>
+                            <a href="{{ route('users.regist.view') }}" class="text-decoration-none fw-bold text-primary border-bottom pb-1">أنشئ حساباً جديداً</a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

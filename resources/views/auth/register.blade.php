@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>إنشاء حساب جديد</title>
+    <title>حساب جديد - منصة المقالات</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
     <style>
         body {
@@ -16,26 +16,23 @@
             border: none;
         }
 
-        .btn-primary {
-            background-color: #4facfe;
+        .btn-gradient {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
             border: none;
+            color: white;
             transition: 0.3s;
         }
 
-        .btn-primary:hover {
-            background-color: #00f2fe;
+        .btn-gradient:hover {
             transform: translateY(-2px);
+            color: white;
+            box-shadow: 0 10px 20px rgba(79, 172, 254, 0.3);
         }
 
         .form-floating>label {
             right: 0;
             left: auto;
             padding-right: 1.25rem;
-        }
-
-        .form-control:focus {
-            box-shadow: 0 0 0 0.25rem rgba(79, 172, 254, 0.25);
-            border-color: #4facfe;
         }
     </style>
 </head>
@@ -46,8 +43,8 @@
             <div class="col-md-7 col-lg-5">
                 <div class="card shadow-lg p-4 p-md-5">
                     <div class="text-center mb-4">
-                        <h2 class="fw-bold text-dark">حساب جديد 🚀</h2>
-                        <p class="text-muted">انضم لينا دلوقتي وشارك مقالاتك</p>
+                        <h2 class="fw-bold text-dark">حساب جديد ✨</h2>
+                        <p class="text-muted">انضم إلينا وشارك أفكارك مع الجميع</p>
                     </div>
 
                     @if($errors->any())
@@ -82,18 +79,17 @@
                             <label for="passConfirmInput">تأكيد كلمة المرور</label>
                         </div>
 
-                        <button type="submit" class="btn btn-primary w-100 rounded-pill fw-bold fs-5 py-2 mb-3 shadow-sm">إنشاء الحساب</button>
+                        <button type="submit" class="btn btn-gradient w-100 rounded-pill fw-bold fs-5 py-3 mb-3">إنشاء الحساب 🚀</button>
 
                         <div class="text-center mt-2">
                             <span class="text-muted">لديك حساب بالفعل؟</span>
-                            <a href="{{ route('login') }}" class="text-decoration-none fw-bold text-primary">سجل دخول من هنا</a>
+                            <a href="{{ route('login') }}" class="text-decoration-none fw-bold text-primary border-bottom pb-1">سجل دخول من هنا</a>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

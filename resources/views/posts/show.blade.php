@@ -5,122 +5,136 @@
     <meta charset="UTF-8">
     <title>{{ $post->title }}</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.rtl.min.css">
+    <style>
+        body {
+            background-color: #f4f7f6;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar-custom {
+            background: linear-gradient(135deg, #2b2d42 0%, #1a1b28 100%);
+            padding: 15px 0;
+        }
+
+        .card {
+            border: none;
+            border-radius: 15px;
+        }
+
+        .btn-gradient {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            border: none;
+            color: white;
+            transition: 0.3s;
+        }
+
+        .btn-gradient:hover {
+            transform: translateY(-2px);
+            color: white;
+            box-shadow: 0 5px 15px rgba(79, 172, 254, 0.4);
+        }
+
+        .comment-box {
+            background-color: #fdfdfd;
+            border-radius: 12px;
+            border-right: 4px solid #4facfe;
+            transition: 0.3s;
+        }
+
+        .comment-box:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
 </head>
 
-<body class="bg-light">
+<body>
 
-    <div class="container py-5" style="max-width: 900px;">
-        <a href="{{ route('posts.index') }}" class="btn btn-outline-dark mb-4 rounded-pill">⬅ العودة لكل المقالات</a>
+    <!-- الناف بار -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom mb-5 shadow">
+        <div class="container d-flex justify-content-between align-items-center">
+            <a class="navbar-brand fw-bold fs-4" href="{{ route('posts.index') }}">🚀 منصة المقالات</a>
+            <div class="d-flex align-items-center gap-3">
+                <span class="text-white fw-semibold bg-white bg-opacity-10 px-3 py-1 rounded-pill">
+                    أهلاً، {{ auth()->user()->name ?? 'زائر' }} 👤
+                </span>
+            </div>
+        </div>
+    </nav>
 
-        <div class="card border-0 shadow-sm rounded-4 overflow-hidden mb-5">
+    <div class="container pb-5" style="max-width: 850px;">
+
+        <!-- تفاصيل المقال -->
+        <div class="card shadow-sm mb-5 p-4 p-md-5 bg-white">
+            <div class="d-flex justify-content-between align-items-center mb-4 border-bottom pb-3">
+                <h2 class="fw-bold text-dark m-0">{{ $post->title }}</h2>
+                <a href="{{ route('posts.index') }}" class="btn btn-light border shadow-sm rounded-pill px-4 fw-bold">رجوع ↩️</a>
+            </div>
+
+            <div class="d-flex align-items-center text-muted mb-4 small fw-semibold">
+                <span class="me-4"><i class="bi bi-person"></i> ✍️ الكاتب: {{ $post->user->name ?? 'مجهول' }}</span>
+                <span><i class="bi bi-calendar"></i> 📅 النشر: {{ $post->created_at->format('Y-m-d') }}</span>
+            </div>
+
             @if($post->image)
-            <img src="{{ asset('storage/' . $post->image) }}" class="w-100" style="max-height: 400px; object-fit: cover;" alt="صورة المقال">
+            <div class="text-center mb-4">
+                <img src="{{ asset('storage/' . $post->image) }}" class="img-fluid rounded-4 shadow-sm" alt="Post Image" style="max-height: 450px; object-fit: cover; width: 100%;">
+            </div>
             @endif
-            <div class="card-body p-4 p-md-5">
-                <h1 class="fw-bold text-dark mb-3">{{ $post->title }}</h1>
-                <div class="d-flex justify-content-between align-items-center text-muted mb-4 pb-3 border-bottom">
-                    <span>👤 بواسطة: <strong class="text-primary">{{ $post->user->name ?? 'مجهول' }}</strong></span>
-                    <span>📅 {{ $post->created_at->format('Y-m-d') }}</span>
-                </div>
-                <p class="fs-5 text-secondary" style="line-height: 1.8;">
-                    {!! nl2br(e($post->content)) !!}
-                </p>
-            </div>
-        </div>
 
-        <div class="card shadow-sm border-0 rounded-4">
-            <div class="card-body p-4 p-md-5">
+            <p class="fs-5 text-dark" style="line-height: 1.9; text-align: justify;">
+                {{ $post->content }}
+            </p>
 
-                <h4 class="fw-bold mb-4">💬 التعليقات ({{ $post->comments->count() }})</h4>
-
-                @if(session('success'))
-                <div class="alert alert-success text-center fw-semibold py-2 border-0 shadow-sm rounded-3">
-                    ✅ {{ session('success') }}
-                </div>
-                @endif
-
-                @if($errors->any())
-                <div class="alert alert-danger text-center fw-semibold py-2 border-0 shadow-sm rounded-3">
-                    ⚠️ {{ $errors->first() }}
-                </div>
-                @endif
-
-                <form action="{{ route('comments.store', $post->id) }}" method="POST" class="mb-5">
+            <!-- أزرار التعديل والحذف (تظهر لصاحب المقال فقط) -->
+            @if(auth()->id() == $post->user_id)
+            <div class="mt-5 pt-3 border-top d-flex justify-content-end gap-2">
+                <a href="{{ route('posts.edit', $post->id) }}" class="btn btn-outline-secondary rounded-pill px-4 fw-bold">✏️ تعديل</a>
+                <form action="{{ route('posts.destroy', $post->id) }}" method="POST" class="m-0" onsubmit="return confirm('هل أنت متأكد من حذف هذا المقال نهائياً؟');">
                     @csrf
-                    <div class="mb-3">
-                        <textarea name="body" class="form-control rounded-3" rows="3" placeholder="اكتب تعليقك هنا يا {{ auth()->user()->name }}..." required></textarea>
-                    </div>
-                    <button type="submit" class="btn btn-dark px-4 fw-semibold rounded-3">إرسال التعليق ➔</button>
+                    @method('DELETE')
+                    <button type="submit" class="btn btn-danger rounded-pill px-4 fw-bold shadow-sm">🗑️ حذف</button>
                 </form>
+            </div>
+            @endif
+        </div>
 
-                <hr class="my-4 text-muted">
+        <!-- قسم التعليقات -->
+        <div class="card shadow-sm p-4 p-md-5 bg-white">
+            <h4 class="fw-bold mb-4 text-dark border-bottom pb-3">💬 التعليقات</h4>
 
-                <div class="comments-list">
-                    @forelse($post->comments as $comment)
-                    <div class="card mb-3 border bg-light rounded-3 shadow-sm">
-                        <div class="card-body p-3 p-md-4">
-
-                            <div class="d-flex justify-content-between align-items-center mb-2">
-                                <h6 class="fw-bold text-primary mb-0">👤 {{ $comment->user->name }}</h6>
-                                <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
-                            </div>
-
-                            <p class="card-text text-dark mb-3" style="line-height: 1.7;">{{ $comment->body }}</p>
-
-                            <div class="d-flex align-items-center gap-2 flex-wrap">
-                                <form action="{{ route('comments.like', $comment->id) }}" method="POST" class="m-0">
-                                    @csrf
-                                    <button type="submit" class="btn btn-sm {{ method_exists($comment, 'isLikedByAuthUser') && $comment->isLikedByAuthUser() ? 'btn-danger' : 'btn-outline-danger' }} rounded-pill px-3">
-                                        🤍 إعجاب
-                                        <span class="badge bg-white text-danger ms-1">{{ $comment->likes->count() }}</span>
-                                    </button>
-                                </form>
-
-                                @if($comment->user_id === auth()->id())
-                                <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" type="button" data-bs-toggle="collapse" data-bs-target="#edit-comment-{{ $comment->id }}">
-                                    ✏️ تعديل
-                                </button>
-
-                                <form action="{{ route('comments.destroy', $comment->id) }}" method="POST" class="m-0" onsubmit="return confirm('هل أنت متأكد من حذف هذا التعليق؟');">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-outline-dark rounded-pill px-3">🗑️ حذف</button>
-                                </form>
-                                @endif
-                            </div>
-
-                            @if($comment->user_id === auth()->id())
-                            <div class="collapse mt-3" id="edit-comment-{{ $comment->id }}">
-                                <div class="card card-body border-0 bg-white shadow-sm rounded-3 p-3">
-                                    <form action="{{ route('comments.update', $comment->id) }}" method="POST">
-                                        @csrf
-                                        @method('PUT')
-                                        <div class="mb-2">
-                                            <textarea name="body" class="form-control form-control-sm rounded-3" rows="2" required>{{ $comment->body }}</textarea>
-                                        </div>
-                                        <div class="d-flex justify-content-end gap-2">
-                                            <button type="button" class="btn btn-sm btn-light" data-bs-toggle="collapse" data-bs-target="#edit-comment-{{ $comment->id }}">إلغاء</button>
-                                            <button type="submit" class="btn btn-sm btn-success px-3 fw-semibold">حفظ</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            @endif
-
-                        </div>
-                    </div>
-                    @empty
-                    <div class="text-center py-5 text-muted">
-                        <h5>📭 لا توجد تعليقات حتى الآن..</h5>
-                    </div>
-                    @endforelse
+            <!-- فورم إضافة تعليق -->
+            <form action="{{ route('comments.store', $post->id) }}" method="POST" class="mb-5">
+                @csrf
+                <div class="form-floating mb-3">
+                    <textarea name="body" class="form-control rounded-3 bg-light" id="commentInput" placeholder="اكتب تعليقك هنا..." style="height: 110px" required></textarea>
+                    <label for="commentInput" class="text-muted fw-semibold">أضف تعليقاً يثري النقاش...</label>
                 </div>
+                <div class="text-end">
+                    <button type="submit" class="btn btn-gradient rounded-pill px-5 py-2 fw-bold shadow-sm">إرسال التعليق 🚀</button>
+                </div>
+            </form>
 
+            <!-- عرض التعليقات -->
+            <div class="d-flex flex-column gap-3">
+                @forelse($post->comments as $comment)
+                <div class="comment-box p-3 shadow-sm border">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <strong class="text-primary fs-6">{{ $comment->user->name ?? 'مستخدم' }}</strong>
+                        <small class="text-muted fw-semibold">{{ $comment->created_at->diffForHumans() }}</small>
+                    </div>
+                    <p class="mb-0 text-dark" style="font-size: 0.95rem;">{{ $comment->body }}</p>
+                </div>
+                @empty
+                <div class="text-center text-muted py-5 bg-light rounded-4">
+                    <h5 class="fw-bold mb-2">لا توجد تعليقات حتى الآن 📭</h5>
+                    <p class="mb-0">كن أول من يشارك برأيه في هذا المقال!</p>
+                </div>
+                @endforelse
             </div>
         </div>
+
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
