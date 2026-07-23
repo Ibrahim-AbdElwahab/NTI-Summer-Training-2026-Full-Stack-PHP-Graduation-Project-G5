@@ -23,7 +23,6 @@ class Comment extends Model
         return $this->hasMany(Like::class);
     }
 
-    // دالة مساعدة عشان نعرف هل اليوزر المسجل حالياً عامل لايك للتعليق ده ولا لأ
     public function isLikedByAuthUser()
     {
         return $this->likes()->where('user_id', auth()->id())->exists();

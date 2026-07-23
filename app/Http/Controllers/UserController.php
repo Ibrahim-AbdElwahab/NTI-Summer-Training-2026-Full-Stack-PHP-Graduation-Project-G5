@@ -17,7 +17,7 @@ class UserController extends Controller
 
     public function store()
     {
-        return view('regist');
+        return view('auth.register');
     }
 
     public function Register(Request $request)
@@ -40,7 +40,7 @@ class UserController extends Controller
 
     public function showLogin()
     {
-        return view('login');
+        return view('auth.login');
     }
 
     public function login(Request $request)
@@ -65,6 +65,7 @@ class UserController extends Controller
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        return redirect()->route('users.login.view')->with('success', 'Logout successfully');
+
+        return redirect()->route('login')->with('success', 'Logout successfully');
     }
 }

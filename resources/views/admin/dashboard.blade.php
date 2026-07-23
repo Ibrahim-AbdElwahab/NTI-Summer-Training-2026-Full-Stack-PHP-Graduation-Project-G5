@@ -10,13 +10,11 @@
 <body class="bg-light">
 
     <div class="container py-5">
-        <!-- رأس الصفحة -->
         <div class="d-flex justify-content-between align-items-center mb-5 p-4 bg-white rounded-4 shadow-sm">
             <h2 class="fw-bold m-0 text-primary">🛡️ لوحة تحكم المسؤول (Admin Dashboard)</h2>
             <a href="{{ route('posts.index') }}" class="btn btn-outline-dark fw-semibold">🏠 العودة للموقع</a>
         </div>
 
-        <!-- كروت الإحصائيات -->
         <div class="row g-4 mb-5">
             <div class="col-md-6">
                 <div class="card border-0 bg-primary text-white rounded-4 shadow py-4 text-center">
@@ -36,7 +34,6 @@
             </div>
         </div>
 
-        <!-- أزرار التحكم السريع -->
         <div class="card border-0 bg-white rounded-4 shadow-sm p-4">
             <h4 class="fw-bold mb-4">⚙️ إدارة النظام</h4>
             <div class="d-flex gap-3 flex-wrap">
